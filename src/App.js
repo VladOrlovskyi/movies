@@ -1,6 +1,7 @@
 import "./App.css";
 import React from "react";
 import MovieItem from "./components/MovieItem";
+import MovieTabs from "./components/MovieTabs";
 import { API_URL, API_KEY_3 } from "./utils/api";
 
 class App extends React.Component {
@@ -10,17 +11,35 @@ class App extends React.Component {
     this.state = {
       movies: [],
       moviesWillWatch: [],
+      sort_by: "popularity.desc"
     };
   }
 
   componentDidMount() {
-    console.log("didMount");
-    fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}`)
+    // console.log("didMount");
+    this.getMovies()
+  }
+
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("didUpdate");
+    console.log("prev", prevProps, prevState);
+    console.log("this", this.props, this.state);
+    if (prevState.sort_by !== this.state.sort_by) {
+      console.log("call api");
+      this.getMovies()
+    }
+  }
+
+  getMovies = () => {
+    fetch(
+      `${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}`
+    )
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        console.log("data", data);
+        // console.log("data", data);
         this.setState({
           movies: data.results,
         });
@@ -58,12 +77,27 @@ class App extends React.Component {
     });
   };
 
+
+  updateSortBy = value => {
+    this.setState({
+      sort_by: value
+    })
+  }
+
   render() {
-    console.log("render", this.state, this.temp);
+    console.log("render", this.state, this.temp, this.state.sort_by);
     return (
       <div className="container">
         <div className="row">
           <div className="col-9">
+            <div className="row mb-4">
+              <div className="col-12">
+                <MovieTabs
+                  sort_by={this.state.sort_by}
+                  updateSortBy={this.updateSortBy}
+                />
+              </div>
+            </div>
             <div className="row">
               {this.state.movies.map((movie) => {
                 return (
