@@ -2,46 +2,58 @@ import "./App.css";
 import React from "react";
 import MovieItem from "./components/MovieItem";
 import MovieTabs from "./components/MovieTabs";
+import Pagination from "react-js-pagination";
 import { API_URL, API_KEY_3 } from "./utils/api";
 
+
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       movies: [],
       moviesWillWatch: [],
-      sort_by: "popularity.desc"
+      sort_by: "popularity.desc",
+      activePage: 1,
+      pages: null,
+      results: null
+
     };
   }
+
+
 
   componentDidMount() {
     // console.log("didMount");
     this.getMovies()
-  }
 
+  }
 
   componentDidUpdate(prevProps, prevState) {
     console.log("didUpdate");
     console.log("prev", prevProps, prevState);
-    console.log("this", this.props, this.state);
-    if (prevState.sort_by !== this.state.sort_by) {
+    console.log("this", this.state);
+    if (prevState.sort_by !== this.state.sort_by || prevState.activePage !== this.state.activePage) {
       console.log("call api");
       this.getMovies()
     }
+
+
   }
 
   getMovies = () => {
     fetch(
-      `${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}`
+      `${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}&page=${this.state.activePage}`
     )
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        // console.log("data", data);
+        console.log("data", data);
         this.setState({
           movies: data.results,
+          pages: data.total_pages,
+          results: data.total_results
         });
       });
   }
@@ -84,8 +96,17 @@ class App extends React.Component {
     })
   }
 
+
+  handlePageChange = pageNumber => {
+    this.setState({
+      activePage: pageNumber
+    })
+  }
+
+
+
   render() {
-    console.log("render", this.state, this.temp, this.state.sort_by);
+    console.log("render", this.state, this.state.sort_by);
     return (
       <div className="container">
         <div className="row">
@@ -112,11 +133,19 @@ class App extends React.Component {
                 );
               })}
             </div>
+
           </div>
           <div className="col-3">
             <p>Will Watch: {this.state.moviesWillWatch.length}</p>
           </div>
         </div>
+        <Pagination
+          activePage={this.state.activePage}
+          itemsCountPerPage={20}
+          totalItemsCount={10000}  /*відпрацьовує одразу, а потрібен результат після рендеру*/
+          pageRangeDisplayed={5}
+          onChange={this.handlePageChange.bind(this)}
+        />
       </div>
     );
   }
