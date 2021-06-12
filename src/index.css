@@ -15,3 +15,11 @@ code {
   height: 180px;
   object-fit: cover;
 }
+
+.invalid-feedback {
+  display: block;
+}
+
+input.invalid {
+  border-color: #dc3545;
+}
