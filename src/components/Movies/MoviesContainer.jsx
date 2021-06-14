@@ -1,13 +1,12 @@
 import React from "react";
-import MovieItem from "./MovieItem";
-import { API_URL, API_KEY_3 } from "../../api/api";
+import MoviesList from "./MoviesList";
+import { API_KEY_3, API_URL } from "../../api/api";
 import _ from "lodash";
 import queryString from "query-string";
 
-export default class MovieList extends React.Component {
+export default class MoviesContainer extends React.Component {
   constructor() {
     super();
-
     this.state = {
       movies: [],
     };
@@ -50,6 +49,7 @@ export default class MovieList extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (!_.isEqual(this.props.filters, prevProps.filters)) {
+      this.props.onChangePagination({ page: 1 });
       this.getMovies(this.props.filters, 1);
     }
 
@@ -60,16 +60,6 @@ export default class MovieList extends React.Component {
 
   render() {
     const { movies } = this.state;
-    return (
-      <div className="row">
-        {movies.map((movie) => {
-          return (
-            <div key={movie.id} className="col-6 mb-4">
-              <MovieItem item={movie} />
-            </div>
-          );
-        })}
-      </div>
-    );
+    return <MoviesList movies={movies} />;
   }
 }

@@ -11,7 +11,7 @@ export default class Pagination extends React.Component {
 
   prevPage = (page) => (event) => {
     this.props.onChangePagination({
-      page: this.props.page + 1,
+      page: this.props.page - 1,
       total_pages: this.props.total_pages,
     });
   };
