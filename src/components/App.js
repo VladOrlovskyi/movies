@@ -9,7 +9,7 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
 export const AppContext = React.createContext();
-class App extends React.Component {
+export default class App extends React.Component {
   constructor() {
     super();
 
@@ -42,6 +42,16 @@ class App extends React.Component {
     });
   };
 
+
+  onLogOut = () => {
+    cookies.remove("session_id");
+    this.setState({
+      session_id: null,
+      user: null
+    });
+  };
+
+
   onChangeFilters = (event) => {
     const value = event.target.value;
     const name = event.target.name;
@@ -67,21 +77,25 @@ class App extends React.Component {
         `${API_URL}/account?api_key=${API_KEY_3}&session_id=${session_id}`
       ).then((user) => {
         this.updateUser(user);
+        this.updateSessionId(session_id)
       });
     }
   }
 
   render() {
-    const { filters, page, total_pages, user } = this.state;
+    const { filters, page, total_pages, user, session_id } = this.state;
     return (
       <AppContext.Provider
         value={{
-          user: user,
+          user,
+          session_id,
           updateUser: this.updateUser,
+          updateSessionId: this.updateSessionId,
+          onLogOut: this.onLogOut
         }}
       >
         <div>
-          <Header user={user} updateSessionId={this.updateSessionId} />
+          <Header user={user} />
           <div className="container">
             <div className="row mt-4">
               <div className="col-4">
@@ -112,5 +126,3 @@ class App extends React.Component {
     );
   }
 }
-
-export default App;
