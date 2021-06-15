@@ -14,10 +14,10 @@ export default class UISelect extends React.Component {
       <div className="form-group">
         <label htmlFor={id}>{labelText}</label>
         <select
-          className="form-control"
-          value={value}
-          name={name}
           id={id}
+          className="form-control"
+          name={name}
+          value={value}
           onChange={onChange}
         >
           {children}

@@ -5,7 +5,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
-import AppContextHOC from "./HOC/AppContextHOC";
+import AppContextHOC from "../HOC/AppContextHOC";
 import CallApi from "../../api/api";
 
 class UserMenu extends Component {
