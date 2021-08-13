@@ -50,7 +50,7 @@ export default (Component) =>
     render() {
       const { genresList } = this.state;
       const { with_genres, resetGenres, onChange } = this.props;
-      console.log(Component);
+      // console.log(Component);
       return (
         <Component
           genresList={genresList}

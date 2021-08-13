@@ -7,31 +7,17 @@ import MoviePage from "./pages/MoviePage/MoviePage";
 import AccountFavorites from "./pages/AccountPage/AccountFavorites";
 import Cookies from "universal-cookie";
 import { BrowserRouter, Route } from "react-router-dom";
+import { actionCreaterUpdateAuth } from "../";
 
 const cookies = new Cookies();
 
 export const AppContext = React.createContext();
 export default class App extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      user: null,
-      session_id: null,
-      isAuth: false,
-    };
-  }
-
   updateAuth = (user, session_id) => {
-    cookies.set("session_id", session_id, {
-      path: "/",
-      maxAge: 2592000,
-    });
-    this.setState({
-      session_id,
+    this.props.store.dispatch(actionCreaterUpdateAuth({
       user,
-      isAuth: true,
-    });
+      session_id
+    }))
   };
 
   onLogOut = () => {
@@ -44,17 +30,15 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
-    const session_id = cookies.get("session_id");
-    if (session_id) {
-      CallApi("/account").then((user) => {
-        this.updateUser(user);
-        this.updateSessionId(session_id);
-      });
-    }
+    this.props.store.subscribe(() => {
+      console.log("change", this.props.store.getState());
+      this.forceUpdate()
+    })
+
   }
 
   render() {
-    const { user, session_id, isAuth } = this.state;
+    const { user, session_id, isAuth } = this.props.store.getState();
     return isAuth || !session_id ? (
       <BrowserRouter>
         <AppContext.Provider
@@ -71,6 +55,7 @@ export default class App extends React.Component {
             <Route exact path="/" component={MoviesPage} />
             <Route path="/movie/:id" component={MoviePage} />
             <Route path="/account/favorites" component={AccountFavorites} />
+            { }
           </div>
         </AppContext.Provider>
       </BrowserRouter>

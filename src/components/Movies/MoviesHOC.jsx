@@ -54,7 +54,7 @@ export default (Component) =>
 
     render() {
       const { movies } = this.state;
-      console.log(Component);
+      // console.log(Component);
       return <Component movies={movies} />;
     }
   };
