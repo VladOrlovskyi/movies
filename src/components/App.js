@@ -8,43 +8,30 @@ import AccountFavorites from "./pages/AccountPage/AccountFavorites";
 import Cookies from "universal-cookie";
 import { BrowserRouter, Route } from "react-router-dom";
 import { actionCreatorLogOut, actionCreatorUpdateAuth } from "../actions/actions";
+import { connect } from "react-redux";
 
 const cookies = new Cookies();
 
 export const AppContext = React.createContext();
-export default class App extends React.Component {
-  updateAuth = (user, session_id) => {
-    this.props.store.dispatch(actionCreatorUpdateAuth({
-      user,
-      session_id
-    }))
-  };
-
-  onLogOut = () => {
-    this.props.store.dispatch(actionCreatorLogOut())
-  };
+class App extends React.Component {
 
   componentDidMount() {
-    const { store } = this.props;
-    const { session_id } = store.getState();
-    store.subscribe(() => {
-      console.log("change", this.props.store.getState());
-      this.forceUpdate()
-    })
+    const { session_id } = this.props;
     if (session_id) {
       CallApi.get("/account", {
         params: {
           session_id
         }
       }).then((user) => {
-        this.updateAuth(user, session_id);
+        this.props.updateAuth(user, session_id);
       });
     }
 
   }
 
   render() {
-    const { user, session_id, isAuth } = this.props.store.getState();
+    console.log(this.props);
+    const { user, session_id, isAuth, updateAuth, onLogOut } = this.props;
     return isAuth || !session_id ? (
       <BrowserRouter>
         <AppContext.Provider
@@ -52,8 +39,8 @@ export default class App extends React.Component {
             user,
             session_id,
             isAuth,
-            updateAuth: this.updateAuth,
-            onLogOut: this.onLogOut,
+            updateAuth,
+            onLogOut,
           }}
         >
           <div>
@@ -70,3 +57,23 @@ export default class App extends React.Component {
     );
   }
 }
+
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+    session_id: state.session_id,
+    isAuth: state.isAuth
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateAuth: (user, session_id) => dispatch(actionCreatorUpdateAuth({
+      user,
+      session_id
+    })),
+    onLogOut: () => dispatch(actionCreatorLogOut())
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App)

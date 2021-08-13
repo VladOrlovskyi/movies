@@ -5,13 +5,13 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css';
 import store from './store/store';
+import { Provider } from "react-redux"
 
 
 ReactDOM.render(
-
-  <App
-    store={store}
-  />
+  <Provider store={store}>
+    <App />
+  </Provider>
   ,
   document.getElementById('root')
 );

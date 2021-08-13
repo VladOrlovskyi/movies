@@ -7,6 +7,7 @@ import {
 } from "reactstrap";
 import AppContextHOC from "../HOC/AppContextHOC";
 import CallApi from "../../api/api";
+import { Link } from "react-router-dom";
 
 class UserMenu extends Component {
   state = { dropdownOpen: false };
@@ -46,6 +47,9 @@ class UserMenu extends Component {
           />
         </DropdownToggle>
         <DropdownMenu right>
+          <DropdownItem>
+            <Link to="/account/favorites">Избранные</Link>
+          </DropdownItem>
           <DropdownItem onClick={this.handleLogOut}>Выйти</DropdownItem>
         </DropdownMenu>
       </Dropdown>
