@@ -7,33 +7,39 @@ import MoviePage from "./pages/MoviePage/MoviePage";
 import AccountFavorites from "./pages/AccountPage/AccountFavorites";
 import Cookies from "universal-cookie";
 import { BrowserRouter, Route } from "react-router-dom";
-import { actionCreaterUpdateAuth } from "../";
+import { actionCreatorLogOut, actionCreatorUpdateAuth } from "../actions/actions";
 
 const cookies = new Cookies();
 
 export const AppContext = React.createContext();
 export default class App extends React.Component {
   updateAuth = (user, session_id) => {
-    this.props.store.dispatch(actionCreaterUpdateAuth({
+    this.props.store.dispatch(actionCreatorUpdateAuth({
       user,
       session_id
     }))
   };
 
   onLogOut = () => {
-    cookies.remove("session_id");
-    this.setState({
-      session_id: null,
-      user: null,
-      isAuth: false,
-    });
+    this.props.store.dispatch(actionCreatorLogOut())
   };
 
   componentDidMount() {
-    this.props.store.subscribe(() => {
+    const { store } = this.props;
+    const { session_id } = store.getState();
+    store.subscribe(() => {
       console.log("change", this.props.store.getState());
       this.forceUpdate()
     })
+    if (session_id) {
+      CallApi.get("/account", {
+        params: {
+          session_id
+        }
+      }).then((user) => {
+        this.updateAuth(user, session_id);
+      });
+    }
 
   }
 
