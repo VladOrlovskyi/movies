@@ -5,11 +5,12 @@ const cookies = new Cookies();
 const initialState = {
     user: null,
     session_id: cookies.get("session_id"),
-    isAuth: false
+    showLoginModal: false,
+    favoriteMovies: []
 };
 
 
-const reducerApp = (state = initialState, action) => {
+const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case "UPDATE_AUTH":
             cookies.set("session_id", action.payload.session_id, {
@@ -20,18 +21,27 @@ const reducerApp = (state = initialState, action) => {
                 ...state,
                 user: action.payload.user,
                 session_id: action.payload.session_id,
-                isAuth: true
             };
         case "LOGOUT":
             cookies.remove("session_id");
             return {
+                ...state,
                 session_id: null,
                 user: null,
-                isAuth: false
             };
+        case "TOGGLE_LOGIN_MODAL":
+            return {
+                ...state,
+                showLoginModal: !state.showLoginModal
+            };
+        case "UPDATE_FAVORITE_MOVIES":
+            return {
+                ...state,
+                favoriteMovies: action.payload
+            }
         default:
             return state
     }
 }
 
-export default reducerApp;
+export default authReducer;

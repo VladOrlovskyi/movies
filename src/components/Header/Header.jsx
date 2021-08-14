@@ -1,24 +1,36 @@
 import React from "react";
-import Login from "./Login/Login";
 import UserMenu from "./UserMenu";
+import AppContextHOC from "../HOC/AppContextHOC";
+import { Link } from "react-router-dom";
 
 class Header extends React.Component {
   render() {
-    const { user } = this.props;
+    const { user, toggleLoginModal } = this.props;
     return (
       <nav className="navbar navbar-dark bg-primary">
         <div className="container">
           <ul className="navbar-nav">
             <li className="nav-item active">
-              <a href="/" className="nav-link">
+              <Link className="nav-link" to="/">
                 Home
-              </a>
+              </Link>
             </li>
           </ul>
-          {user ? <UserMenu /> : <Login />}
+
+          {user ? (
+            <UserMenu />
+          ) : (
+            <button
+              className="btn btn-success"
+              type="button"
+              onClick={toggleLoginModal}
+            >
+              Login
+            </button>
+          )}
         </div>
       </nav>
     );
   }
 }
-export default Header;
+export default AppContextHOC(Header);
