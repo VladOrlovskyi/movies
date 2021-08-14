@@ -6,7 +6,7 @@ import MoviesPage from "./pages/MoviesPage/MoviesPage";
 import MoviePage from "./pages/MoviePage/MoviePage";
 import { BrowserRouter, Route } from "react-router-dom";
 import { connect } from "react-redux";
-import { updateAuth, onLogOut, toggleLoginModal, updateFavoriteMovies } from "../actions/actions";
+import { updateAuth, onLogOut, toggleLoginModal, updateFavoriteMovies } from "../redux/auth/auth.action.js";
 import Login from "./Header/Login/Login";
 
 
