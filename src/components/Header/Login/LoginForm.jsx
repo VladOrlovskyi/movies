@@ -1,12 +1,17 @@
 import React from "react";
 import CallApi from "../../../api/api";
+import validateFields from "./validate";
+import Field from "./Field";
 import { withAuth } from "../../../hoc/withAuth";
 import classNames from "classnames";
+import { event } from "jquery";
 
 class LoginForm extends React.Component {
   state = {
-    username: "",
-    password: "",
+    values: {
+      username: "",
+      password: "",
+    },
     errors: {},
     submitting: false,
   };
@@ -15,7 +20,10 @@ class LoginForm extends React.Component {
     const name = e.target.name;
     const value = e.target.value;
     this.setState((prevState) => ({
-      [name]: value,
+      values: {
+        ...prevState.values,
+        [name]: value,
+      },
       errors: {
         ...prevState.errors,
         base: null,
@@ -26,7 +34,7 @@ class LoginForm extends React.Component {
 
   handleBlur = () => {
     console.log("on blur");
-    const errors = this.validateFields();
+    const errors = validateFields(this.state.values);
     if (Object.keys(errors).length > 0) {
       this.setState((prevState) => ({
         errors: {
@@ -35,14 +43,6 @@ class LoginForm extends React.Component {
         },
       }));
     }
-  };
-
-  validateFields = () => {
-    const errors = {};
-    if (this.state.username === "") {
-      errors.username = "Not empty";
-    }
-    return errors;
   };
 
   onSubmit = () => {
@@ -100,7 +100,7 @@ class LoginForm extends React.Component {
 
   onLogin = (e) => {
     e.preventDefault();
-    const errors = this.validateFields();
+    const errors = validateFields(this.state.values);
     if (Object.keys(errors).length > 0) {
       this.setState((prevState) => ({
         errors: {
@@ -119,7 +119,11 @@ class LoginForm extends React.Component {
     });
 
   render() {
-    const { username, password, errors, submitting } = this.state;
+    const {
+      values: { username, password },
+      errors,
+      submitting,
+    } = this.state;
 
     return (
       <div className="form-login-container">
@@ -127,38 +131,28 @@ class LoginForm extends React.Component {
           <h1 className="h3 mb-3 font-weight-normal text-center">
             Авторизация
           </h1>
-          <div className="form-group">
-            <label htmlFor="username">Пользователь</label>
-            <input
-              type="text"
-              className={this.getClassForInput("username")}
-              id="username"
-              placeholder="Пользователь"
-              name="username"
-              value={username}
-              onChange={this.onChange}
-              onBlur={this.handleBlur}
-            />
-
-            {errors.username && (
-              <div className="invalid-feedback">{errors.username}</div>
-            )}
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Пароль</label>
-            <input
-              type="password"
-              className={this.getClassForInput("password")}
-              id="password"
-              placeholder="Пароль"
-              name="password"
-              value={password}
-              onChange={this.onChange}
-            />
-            {errors.password && (
-              <div className="invalid-feedback">{errors.password}</div>
-            )}
-          </div>
+          <Field
+            id="username"
+            labelText="Пользователь"
+            type="text"
+            placeholder="Пользователь"
+            name="username"
+            value={username}
+            onChange={this.onChange}
+            handleBlur={this.handleBlur}
+            error={errors.username}
+          />
+          <Field
+            id="password"
+            labelText="Пароль"
+            type="password"
+            placeholder="Пароль"
+            name="password"
+            value={password}
+            onChange={this.onChange}
+            handleBlur={this.handleBlur}
+            error={errors.password}
+          />
           <button
             type="submit"
             className=" btn btn-lg btn-primary btn-block"

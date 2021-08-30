@@ -16,7 +16,6 @@ class Header extends React.Component {
               </Link>
             </li>
           </ul>
-
           {auth.user ? (
             <UserMenu />
           ) : (

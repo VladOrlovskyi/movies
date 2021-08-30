@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import UISelect from "../UIComponents/UISelect";
 
 export default class PrimaryReleaseYear extends React.PureComponent {
   static propTypes = {
@@ -20,19 +19,22 @@ export default class PrimaryReleaseYear extends React.PureComponent {
   render() {
     const { primary_release_year, onChangeFilters, options } = this.props;
     return (
-      <UISelect
-        id="primary_release_year"
-        name="priamry_release_year"
-        value={primary_release_year}
-        onChange={onChangeFilters}
-        labelText="Год релиза:"
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </UISelect>
+      <div className="form-group">
+        <label htmlFor="primary_release_year">Сортировать по:</label>
+        <select
+          className="form-control"
+          id="primary_release_year"
+          name="primary_release_year"
+          value={primary_release_year}
+          onChange={onChangeFilters}
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
     );
   }
 }
