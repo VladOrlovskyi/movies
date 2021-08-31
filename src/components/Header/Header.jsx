@@ -2,10 +2,11 @@ import React from "react";
 import UserMenu from "./UserMenu";
 import { withAuth } from "../../hoc/withAuth";
 import { Link } from "react-router-dom";
+import Login from "./Login/Login";
 
 class Header extends React.Component {
   render() {
-    const { auth, authActions } = this.props;
+    const { auth } = this.props;
     return (
       <nav className="navbar navbar-dark bg-primary">
         <div className="container">
@@ -16,17 +17,7 @@ class Header extends React.Component {
               </Link>
             </li>
           </ul>
-          {auth.user ? (
-            <UserMenu />
-          ) : (
-            <button
-              className="btn btn-success"
-              type="button"
-              onClick={authActions.toggleLoginModal}
-            >
-              Login
-            </button>
-          )}
+          {auth.user ? <UserMenu /> : <Login />}
         </div>
       </nav>
     );

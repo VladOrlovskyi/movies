@@ -7,11 +7,22 @@ class Login extends React.Component {
   render() {
     const { auth, authActions } = this.props;
     return (
-      <Modal isOpen={auth.showLoginModal} toggle={authActions.toggleLoginModal}>
-        <ModalBody>
-          <LoginForm />
-        </ModalBody>
-      </Modal>
+      <div>
+        <div
+          className="btn login-btn btn-success"
+          onClick={authActions.toggleLoginModal}
+        >
+          Войти
+        </div>
+        <Modal
+          isOpen={auth.showLoginModal}
+          toggle={authActions.toggleLoginModal}
+        >
+          <ModalBody>
+            <LoginForm />
+          </ModalBody>
+        </Modal>
+      </div>
     );
   }
 }

@@ -4,17 +4,19 @@ import validateFields from "./validate";
 import Field from "./Field";
 import { withAuth } from "../../../hoc/withAuth";
 import classNames from "classnames";
-import { event } from "jquery";
 
 class LoginForm extends React.Component {
-  state = {
-    values: {
-      username: "",
-      password: "",
-    },
-    errors: {},
-    submitting: false,
-  };
+  constructor() {
+    super();
+    this.state = {
+      values: {
+        username: "",
+        password: "",
+      },
+      errors: {},
+      submitting: false,
+    };
+  }
 
   onChange = (e) => {
     const name = e.target.name;
@@ -46,17 +48,21 @@ class LoginForm extends React.Component {
   };
 
   onSubmit = () => {
+    const {
+      values: { username, password },
+    } = this.state;
+
+    let session_id = null;
     this.setState({
       submitting: true,
     });
 
-    let session_id = null;
     CallApi.get("/authentication/token/new")
       .then((data) => {
         return CallApi.post("/authentication/token/validate_with_login", {
           body: {
-            username: this.state.username,
-            password: this.state.password,
+            username,
+            password,
             request_token: data.request_token,
           },
         });
