@@ -1,42 +1,39 @@
 import React from "react";
-import classNames from "classnames";
+import PropTypes from "prop-types";
 
 export default class Pagination extends React.Component {
-  nextPage = () => {
-    this.props.onChangePagination({
-      page: this.props.page + 1,
-      total_pages: this.props.total_pages,
-    });
-  };
-
-  prevPage = (page) => (event) => {
-    this.props.onChangePagination({
-      page: this.props.page - 1,
-      total_pages: this.props.total_pages,
-    });
+  static propTypes = {
+    page: PropTypes.number.isRequired,
+    total_pages: PropTypes.number.isRequired,
+    onChangePagination: PropTypes.func.isRequired,
   };
 
   render() {
-    const { page, total_pages } = this.props;
+    const { page, total_pages, onChangePagination } = this.props;
 
     return (
-      <nav className="d-flex align-items-center">
-        <ul className="pagination mb-0 mr-3">
-          <li className={classNames("page-item", { disabled: page === 1 })}>
-            <span className="page-link" onClick={this.prevPage(page)}>
-              Назад
-            </span>
-          </li>
-          <li className="page-item">
-            <span className="page-link" onClick={this.nextPage}>
-              Вперед
-            </span>
-          </li>
-        </ul>
-        <span>
-          {page} of {total_pages}
-        </span>
-      </nav>
+      <div>
+        <div className="btn-group btn-pagination">
+          <button
+            type="button"
+            className="btn mr-2"
+            disabled={page === 1}
+            onClick={onChangePagination.bind(null, page - 1, total_pages)}
+          >
+            Назад
+          </button>
+          <button
+            type="button"
+            className="btn"
+            onClick={onChangePagination.bind(null, page + 1, total_pages)}
+          >
+            Вперед
+          </button>
+        </div>
+        <div className="page-pagination">
+          {page} из {total_pages}
+        </div>
+      </div>
     );
   }
 }

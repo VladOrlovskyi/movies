@@ -6,15 +6,18 @@ export default class MoviesPage extends React.Component {
   constructor() {
     super();
 
-    this.state = {
+    this.initialState = {
       filters: {
         sort_by: "popularity.desc",
-        primary_release_year: "2018",
+        primary_release_year: "",
         with_genres: [],
       },
-      page: 1,
-      total_pages: "",
+      pagination: {
+        page: 1,
+        total_pages: 1,
+      },
     };
+    this.state = { ...this.initialState };
   }
 
   onChangeFilters = (event) => {
@@ -28,15 +31,25 @@ export default class MoviesPage extends React.Component {
     }));
   };
 
-  onChangePagination = ({ page, total_pages = this.state.total_pages }) => {
-    this.setState({
-      page,
-      total_pages,
-    });
+  onChangePagination = (
+    page,
+    total_pages = this.state.pagination.total_pages
+  ) => {
+    this.setState((prevState) => ({
+      pagination: {
+        ...prevState.pagination,
+        page,
+        total_pages,
+      },
+    }));
+  };
+
+  onReset = () => {
+    this.setState({ ...this.initialState });
   };
 
   render() {
-    const { total_pages, page, filters } = this.state;
+    const { filters, pagination } = this.state;
     return (
       <div className="container">
         <div className="row mt-4">
@@ -45,11 +58,11 @@ export default class MoviesPage extends React.Component {
               <div className="card-body">
                 <h3>Фильтры:</h3>
                 <Filters
-                  page={page}
-                  total_pages={total_pages}
+                  pagination={pagination}
                   filters={filters}
                   onChangeFilters={this.onChangeFilters}
                   onChangePagination={this.onChangePagination}
+                  onReset={this.onReset}
                 />
               </div>
             </div>
@@ -57,7 +70,7 @@ export default class MoviesPage extends React.Component {
           <div className="col-8">
             <MoviesList
               filters={filters}
-              page={page}
+              pagination={pagination}
               onChangePagination={this.onChangePagination}
             />
           </div>

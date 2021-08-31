@@ -1,8 +1,9 @@
 import React from "react";
 import { API_URL, API_KEY_3 } from "../../api/api";
 import Genres from "./Genres";
+import PropTypes from "prop-types";
 
-class GenresContainer extends React.Component {
+export default class GenresContainer extends React.Component {
   constructor() {
     super();
 
@@ -10,6 +11,11 @@ class GenresContainer extends React.Component {
       genresList: [],
     };
   }
+
+  static propTypes = {
+    with_genres: PropTypes.array.isRequired,
+    onChangeFilters: PropTypes.func.isRequired,
+  };
 
   componentDidMount() {
     const link = `${API_URL}/genre/movie/list?api_key=${API_KEY_3}&language=ru-RU`;
@@ -37,27 +43,15 @@ class GenresContainer extends React.Component {
     });
   };
 
-  resetGenres = () => {
-    this.props.onChangeFilters({
-      target: {
-        name: "with_genres",
-        value: [],
-      },
-    });
-  };
-
   render() {
     const { genresList } = this.state;
-    const { with_genres, resetGenres, onChange } = this.props;
+    const { with_genres } = this.props;
     return (
       <Genres
         genresList={genresList}
         with_genres={with_genres}
-        resetGenres={this.resetGenres}
         onChange={this.onChange}
       />
     );
   }
 }
-
-export default GenresContainer;
