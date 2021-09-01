@@ -51,7 +51,7 @@ class WillWatch extends React.PureComponent {
     }
   };
 
-  getCurrentWatchList = (watchlist, movieId) =>
+  getCurrentWatchList = (watchlist = [], movieId) =>
     watchlist.some((item) => item.id === movieId);
 
   render() {

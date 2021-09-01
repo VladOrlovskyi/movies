@@ -51,14 +51,13 @@ class Favorite extends React.PureComponent {
     }
   };
 
-  getCurrentFavorite = (favorite_movies, movieId) =>
+  getCurrentFavorite = (favorite_movies = [], movieId) =>
     favorite_movies.some((item) => item.id === movieId);
 
   render() {
     const { isLoading } = this.state;
     const { favorite_movies, movieId } = this.props;
     const isFavorite = this.getCurrentFavorite(favorite_movies, movieId);
-
     return (
       <div
         className="d-inline-flex mark-favorite"
