@@ -13,14 +13,8 @@ class WillWatch extends React.PureComponent {
   }
 
   addToWatchList = () => {
-    const {
-      user,
-      session_id,
-      movieId,
-      watchlist,
-      getWatchList,
-      toggleLoginModal,
-    } = this.props;
+    const { user, session_id, movieId, watchlist, getWatchList, authActions } =
+      this.props;
 
     if (session_id) {
       this.setState(
@@ -47,7 +41,7 @@ class WillWatch extends React.PureComponent {
         }
       );
     } else {
-      toggleLoginModal();
+      authActions.toggleLoginModal();
     }
   };
 

@@ -53,7 +53,7 @@ export default class MoviesPage extends React.Component {
     return (
       <div className="container">
         <div className="row mt-4">
-          <div className="col-4">
+          <div className="col-3">
             <div className="card w-100">
               <div className="card-body">
                 <h3>Фильтры:</h3>
@@ -67,7 +67,7 @@ export default class MoviesPage extends React.Component {
               </div>
             </div>
           </div>
-          <div className="col-8">
+          <div className="col-9">
             <MoviesList
               filters={filters}
               pagination={pagination}

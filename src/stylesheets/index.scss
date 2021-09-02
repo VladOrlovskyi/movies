@@ -26,8 +26,8 @@ input.invalid {
 }
 
 $error: #dc3545;
-$bg-color: #081c24;
-$green: #01d277;
+$bg-color: #360094;
+$yellow: #eeff00;
 
 .invalid-feedback {
   display: block;
@@ -42,7 +42,7 @@ input.invalid {
   font-size: 16px;
   font-weight: 600;
   &:hover {
-    color: #01d277;
+    color: $yellow;
   }
 }
 
@@ -53,7 +53,7 @@ input.invalid {
   width: 100%;
   font-weight: 600;
   &:hover {
-    color: $green;
+    color: $yellow;
   }
 }
 
@@ -62,20 +62,20 @@ input.invalid {
   .nav-link {
     text-transform: uppercase;
     width: 77px;
-    border: 4px solid #01d277;
+    border: 4px solid $yellow;
     line-height: 1;
-    padding: 7px 10px;
+    padding: 12px 5px;
     margin-left: 10px;
     border-radius: 10px;
     span {
       font-size: 15px;
       font-weight: 800;
-      color: #01d277;
+      color: $yellow;
     }
   }
 }
 .card {
-  box-shadow: 5px 5px 10px rgba(122, 122, 122, 0.5);
+  box-shadow: 5px 5px 10px rgba(54, 0, 148, 0.5);
   img {
     width: 185px;
     height: 278px;
@@ -101,9 +101,11 @@ input.invalid {
   display: block;
   color: black;
   text-decoration: none;
-  padding: 20px 0;
-  font-size: 16px;
-  font-weight: 600;
+  text-align: center;
+  padding: 30px 0;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: cursive;
   &:hover {
     text-decoration: none;
     color: rgba(black, $alpha: 0.7);
@@ -115,7 +117,8 @@ input.invalid {
   border-top: 1px solid rgba(black, $alpha: 0.1);
   bottom: 0;
   left: 0;
-  padding: 15px 30px;
+  text-align: center;
+  padding: 10px 0;
   text-decoration: none;
   color: black;
   a {
@@ -141,7 +144,7 @@ input.invalid {
   background-position: 50% 50%;
   padding: 50px 0 100px 0;
   z-index: 1;
-  color: #fff;
+  color: $yellow;
   img {
     width: 300px;
     height: 450px;
@@ -155,7 +158,7 @@ input.invalid {
     width: 100%;
     height: 100%;
     display: block;
-    background-color: rgba($bg-color, $alpha: 0.8);
+    background-color: rgba($bg-color, $alpha: 0.3);
   }
 }
 .movie-overwiew_mark {
@@ -235,7 +238,7 @@ input.invalid {
     font-weight: 600;
     &:hover {
       background-color: $bg-color;
-      color: $green;
+      color: $yellow;
     }
   }
 }
@@ -255,7 +258,7 @@ input.invalid {
     background-color: $bg-color;
     color: #fff;
     &:hover {
-      color: $green;
+      color: $yellow;
     }
   }
 }
@@ -299,7 +302,7 @@ input.invalid {
   left: 7px;
   width: 6px;
   height: 14px;
-  border: solid $green;
+  border: solid $bg-color;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }

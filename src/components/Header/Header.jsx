@@ -8,12 +8,12 @@ class Header extends React.Component {
   render() {
     const { auth } = this.props;
     return (
-      <nav className="navbar navbar-dark bg-primary">
+      <nav className="navbar">
         <div className="container">
           <ul className="navbar-nav">
             <li className="nav-item active">
               <Link className="nav-link" to="/movies">
-                Home
+                <span>MOVIES</span>
               </Link>
             </li>
           </ul>
