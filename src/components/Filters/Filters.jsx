@@ -18,7 +18,7 @@ export default class Filters extends React.Component {
         <div>
           <button
             type="button"
-            className="btn  btn-outline-dark"
+            className="btn btn-outline-dark clear-btn"
             onClick={onReset}
           >
             Сбросить фильтры

@@ -19,7 +19,7 @@ class Favorite extends React.PureComponent {
       movieId,
       favorite_movies,
       getFavoriteList,
-      toggleLoginModal,
+      authActions,
     } = this.props;
 
     if (session_id) {
@@ -47,7 +47,7 @@ class Favorite extends React.PureComponent {
         }
       );
     } else {
-      toggleLoginModal();
+      authActions.toggleLoginModal();
     }
   };
 
