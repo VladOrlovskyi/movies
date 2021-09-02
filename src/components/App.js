@@ -24,7 +24,7 @@ class App extends React.Component {
         <div>
           <Header />
           {auth.showLoginModal && <Login />}
-          <Route exact path="/" component={MoviesPage} />
+          <Route exact path="/movies" component={MoviesPage} />
           <Route path="/movie/:id" component={MoviePage} />
         </div>
       </BrowserRouter>
