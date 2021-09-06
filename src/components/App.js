@@ -5,6 +5,7 @@ import MoviesPage from "./pages/MoviesPage/MoviesPage";
 import MoviePage from "./pages/MoviePage/MoviePage";
 import { BrowserRouter, Route } from "react-router-dom";
 import { withAuth } from "../hoc/withAuth"
+import AccountFavorites from "./pages/AccountPage/AccountFavorites";
 
 class App extends React.Component {
 
@@ -23,6 +24,7 @@ class App extends React.Component {
           <Header />
           <Route exact path="/" component={MoviesPage} />
           <Route path="/movie/:id" component={MoviePage} />
+          <Route path="/account/:id/favorite/movies" component={AccountFavorites} />
         </div>
       </BrowserRouter>
     );
