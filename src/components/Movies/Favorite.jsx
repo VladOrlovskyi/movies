@@ -22,6 +22,13 @@ class Favorite extends React.PureComponent {
       authActions,
     } = this.props;
 
+    // console.log("user", user);
+    // console.log("session_id", session_id);
+    // console.log("movieId", movieId);
+    // console.log("favorite_movies", favorite_movies);
+    // console.log("getFavoriteList", getFavoriteList);
+    // console.log("authActions", authActions);
+
     if (session_id) {
       this.setState(
         {
@@ -51,8 +58,11 @@ class Favorite extends React.PureComponent {
     }
   };
 
-  getCurrentFavorite = (favorite_movies = [], movieId) =>
+  getCurrentFavorite = (favorite_movies = [], movieId) => {
     favorite_movies.some((item) => item.id === movieId);
+    // console.log(favorite_movies);
+    // console.log(movieId);
+  };
 
   render() {
     const { isLoading } = this.state;

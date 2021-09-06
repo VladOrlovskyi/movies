@@ -13,7 +13,7 @@ class MovieItem extends React.Component {
       <div className="card">
         <div className="card-body card-movie">
           <div className="card-movie_img">
-            <Link to={`/movie/${item.id}/details}`}>
+            <Link to={`/movie/${item.id}/details`}>
               <Image
                 className="card-img-top card-img--height"
                 alt=""

@@ -12,7 +12,7 @@ class Header extends React.Component {
         <div className="container">
           <ul className="navbar-nav">
             <li className="nav-item active">
-              <Link className="nav-link" to="/movies">
+              <Link className="nav-link" to="/">
                 <span>MOVIES</span>
               </Link>
             </li>

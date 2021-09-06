@@ -47,10 +47,22 @@ class UserMenu extends Component {
           />
         </DropdownToggle>
         <DropdownMenu right>
-          <DropdownItem>
-            <Link to="/account/favorites">Избранные</Link>
+          <DropdownItem className="dropdown-item-user-menu-btn" disabled>
+            <Link
+              to={`/account/${auth.user.id}/favorite/movies`}
+              className="user-menu-btn"
+            >
+              Избранные
+            </Link>
           </DropdownItem>
-          <DropdownItem onClick={this.handleLogOut}>Выйти</DropdownItem>
+          <DropdownItem
+            onClick={this.handleLogOut}
+            className="dropdown-item-user-menu-btn"
+          >
+            <Link to="/" className="user-menu-btn">
+              Выйти
+            </Link>
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
     );
