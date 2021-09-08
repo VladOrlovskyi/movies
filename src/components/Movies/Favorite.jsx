@@ -12,21 +12,43 @@ class Favorite extends React.PureComponent {
     };
   }
 
+  // componentDidMount() {
+  // const {
+  //   auth,
+  //   user,
+  //   session_id,
+  //   movieId,
+  //   favoriteMovies,
+  //   getFavoriteList,
+  //   authActions,
+  // } = this.props;
+  // console.log("auth", auth);
+  // console.log("auth", auth.user);
+  // console.log("auth", auth.session_id);
+  // console.log("movieId", movieId);
+  // console.log("favoriteMovies", favoriteMovies);
+  // console.log("getFavoriteList", getFavoriteList);
+  // console.log("authActions", authActions);
+  // }
+
   markAsFavorite = () => {
     const {
+      auth,
       user,
       session_id,
       movieId,
-      favorite_movies,
-      getFavoriteList,
+      favoriteMovies,
+      updateFavoriteMovies,
       authActions,
     } = this.props;
 
-    // console.log("user", user);
-    // console.log("session_id", session_id);
+    // console.log("auth", auth);
+    // console.log("auth user", auth.user);
+    // console.log("auth user id", auth.user.id);
+    // console.log("auth session id", auth.session_id);
     // console.log("movieId", movieId);
-    // console.log("favorite_movies", favorite_movies);
-    // console.log("getFavoriteList", getFavoriteList);
+    // console.log("favoriteMovies", favoriteMovies);
+    // console.log("updateFavoriteMovies", updateFavoriteMovies);
     // console.log("authActions", authActions);
 
     if (session_id) {
@@ -35,17 +57,17 @@ class Favorite extends React.PureComponent {
           isLoading: true,
         },
         () => {
-          CallApi.post(`/account/${user.id}/favorite`, {
+          CallApi.post(`/account/${auth.user.id}/favorite`, {
             params: {
-              session_id,
+              session_id: this.props.auth.session_id,
             },
             body: {
               media_type: "movie",
               media_id: movieId,
-              favorite: !this.getCurrentFavorite(favorite_movies, movieId),
+              favorite: !this.getCurrentFavorite(favoriteMovies, movieId),
             },
           }).then(() => {
-            getFavoriteList().then(() => {
+            authActions.updateFavoriteMovies().then(() => {
               this.setState({
                 isLoading: false,
               });
@@ -56,18 +78,20 @@ class Favorite extends React.PureComponent {
     } else {
       authActions.toggleLoginModal();
     }
+
+    console.log("auth", auth);
+    console.log("auth user", auth.user);
+    console.log("auth user id", auth.user.id);
   };
 
-  getCurrentFavorite = (favorite_movies = [], movieId) => {
-    favorite_movies.some((item) => item.id === movieId);
-    // console.log(favorite_movies);
-    // console.log(movieId);
+  getCurrentFavorite = (favoriteMovies = [], movieId) => {
+    favoriteMovies.some((item) => item.id === movieId);
   };
 
   render() {
     const { isLoading } = this.state;
-    const { favorite_movies, movieId } = this.props;
-    const isFavorite = this.getCurrentFavorite(favorite_movies, movieId);
+    const { favoriteMovies, movieId } = this.props;
+    const isFavorite = this.getCurrentFavorite(favoriteMovies, movieId);
     return (
       <div
         className="d-inline-flex mark-favorite"

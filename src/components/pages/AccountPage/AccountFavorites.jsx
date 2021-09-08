@@ -1,78 +1,145 @@
 import React, { Component } from "react";
-import Favorite from "../../Movies/Favorite";
-import WillWatch from "../../Movies/WillWatch";
-import Image from "../../UIComponents/Image";
-import Progressbar from "../../UIComponents/Progressbar";
-import { Link } from "react-router-dom";
 import Loader from "../../UIComponents/Loader";
 import CallApi from "../../../api/api";
+import { withAuth } from "../../../hoc/withAuth";
+import Pagination from "../../Filters/Pagination";
+import FavoriteMoviesList from "./FavoriteMovies/FavoriteMoviesList";
+import _ from "lodash";
 
-export default class AccountFavorites extends React.Component {
+class AccountFavorites extends React.Component {
   constructor() {
     super();
 
-    this.state = {
+    this.initialState = {
       isLoading: true,
-      movieDetails: [],
+      favoriteMovies: [],
+      // filters: {
+      //   sort_by: "created_at.desc",
+      // },
+      pagination: {
+        page: null,
+        total_pages: null,
+      },
     };
+    this.state = { ...this.initialState };
   }
 
-  componentDidMount() {
-    const {
-      match: { params },
-    } = this.props;
+  onChangePagination = (
+    page,
+    total_pages = this.state.pagination.total_pages
+  ) => {
+    this.setState((prevState) => ({
+      pagination: {
+        ...prevState.pagination,
+        page,
+        total_pages,
+      },
+    }));
+  };
 
-    CallApi.get(`/movie/${params.id}`, {
-      params: { language: "ru-RU" },
-    }).then((data) => {
+  getFavoriteMovies = () => {
+    const queryStringParams = {
+      language: "ru-RU",
+      page: 1,
+      session_id: this.props.auth.session_id,
+      // sort_by: sort_by,
+      // total_pages: 1,
+      // primary_release_year: primary_release_year,
+      // with_genres: with_genres,
+    };
+
+    const { auth, page } = this.props;
+    // const { page } = this.state;
+
+    if (auth.session_id) {
+      this.setState(
+        {
+          isLoading: false,
+        },
+        () => {
+          CallApi.get(`/account/${auth.user.id}/favorite/movies`, {
+            params: queryStringParams,
+          }).then((data) => {
+            this.onChangePagination(data.page, data.total_pages);
+            this.setState({
+              favoriteMovies: data.results,
+              isLoading: false,
+              pagination: {
+                page: data.page,
+                total_pages: data.total_pages,
+              },
+            });
+            console.log("page data", data.page);
+            console.log("page state data", this.state.pagination.page);
+            console.log("total pages data", data.total_pages);
+            console.log(
+              "total pages state data",
+              this.state.pagination.total_pages
+            );
+          });
+        }
+      );
+    } else {
       this.setState({
-        movieDetails: data,
-        isLoading: false,
+        isLoading: true,
       });
-    });
+    }
+    console.log("auth", auth);
+    console.log("favoriteMovies", auth.favoriteMovies);
+  };
+
+  componentDidMount() {
+    this.getFavoriteMovies();
+    console.log("page data DID MOUNT", this.state.pagination.page);
+    console.log(
+      "total pages data DID MOUNT",
+      this.state.pagination.total_pages
+    );
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!_.isEqual(this.props.page, prevProps.page)) {
+      this.getFavoriteMovies(this.props.page, 1);
+    }
+    if (this.props.page !== prevProps.page) {
+      this.getFavoriteMovies(this.props.page);
+    }
+    console.log("page data DID UPDATE", this.state.pagination.page);
+    console.log(
+      "total pages data DID UPDATE",
+      this.state.pagination.total_pages
+    );
   }
 
   render() {
-    const { isLoading, movieId } = this.state;
+    const { isLoading, favoriteMovies, pagination, page, total_pages } =
+      this.state;
+    // const { page, total_pages } = this.props;
 
     return isLoading ? (
       <Loader />
     ) : (
       <React.Fragment>
-        <div className="row">
-          <div className="col-6 mb-4">
-            <div className="card">
-              <div className="card-body card-movie">
-                <div className="card-movie_img">
-                  <Link to={`/movie/${movieId}/details`}>
-                    <Image
-                      className="card-img-top card-img--height"
-                      alt=""
-                      path={movieId.poster_path || movieId.backdrop_path}
-                    />
-                  </Link>
-                </div>
-                <div className="card-movie_description">
-                  <div className="card-movie_icons">
-                    <Progressbar vote_average={movieId.vote_average} />
-                    <Favorite movieId={movieId} />
-                    <WillWatch movieId={movieId} />
-                  </div>
-                  <Link
-                    className="card-title card-movie_name"
-                    to={`/movie/${movieId}/details`}
-                  >
-                    {movieId.title}
-                  </Link>
-                  <div className="card-movie_details">
-                    <Link to={`/movie/${movieId}/details`}>Подробнее</Link>
-                  </div>
-                </div>
-              </div>
+        <form className="container">
+          <div className="row mt-4">
+            <div className="col-12 mb-6">
+              <FavoriteMoviesList
+                movies={favoriteMovies}
+                // pagination={pagination}
+                // onChangePagination={this.onChangePagination}
+              />
+              <Pagination
+                pagination={pagination}
+                // page={page}
+                // total_pages={total_pages}
+                onChangePagination={this.onChangePagination}
+              />
             </div>
           </div>
-        </div>
+        </form>
       </React.Fragment>
     );
   }
 }
+
+export default withAuth(AccountFavorites);
