@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default class SortBy extends React.Component {
+export default class FavoriteSortBy extends React.Component {
   static propTypes = {
     sort_by: PropTypes.string.isRequired,
     onChangeFilters: PropTypes.func.isRequired,
@@ -9,12 +9,8 @@ export default class SortBy extends React.Component {
 
   static defaultProps = {
     options: [
-      { label: "Популярные по убыванию:", value: "popularity.desc" },
-      { label: "Популярные по возростанию:", value: "popularity.asc" },
-      { label: "Рейтинг по убыванию:", value: "vote_average.desc" },
-      { label: "Рейтинг по возростанию:", value: "vote_average.asc" },
-      // { label: "Рейтинг по desc:", value: "created_at.desc" },
-      // { label: "Рейтинг по asc:", value: "created_at.asc" },
+      { label: "Cозданный  по убыванию:", value: "created_at.desc" },
+      { label: "Cозданный по возростанию:", value: "created_at.asc" },
     ],
   };
 

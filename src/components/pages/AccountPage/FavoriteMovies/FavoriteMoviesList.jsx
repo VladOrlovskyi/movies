@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import FavoriteMovieItem from "./FavoriteMovieItem";
+import FavoriteMoviesHOC from "./FavoriteMoviesHOC";
+import { withAuth } from "../../../../hoc/withAuth";
 
 const FavoriteMoviesList = ({ movies }) => (
   <div className="row">
@@ -22,4 +24,4 @@ FavoriteMoviesList.propTypes = {
   movies: PropTypes.array.isRequired,
 };
 
-export default FavoriteMoviesList;
+export default withAuth(FavoriteMoviesHOC(FavoriteMoviesList));
