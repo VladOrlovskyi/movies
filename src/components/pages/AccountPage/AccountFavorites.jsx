@@ -1,78 +1,81 @@
-import React, { Component } from "react";
-import Favorite from "../../Movies/Favorite";
-import WillWatch from "../../Movies/WillWatch";
-import Image from "../../UIComponents/Image";
-import Progressbar from "../../UIComponents/Progressbar";
-import { Link } from "react-router-dom";
-import Loader from "../../UIComponents/Loader";
-import CallApi from "../../../api/api";
+import React from "react";
+import FavoriteMoviesList from "./FavoriteMovies/FavoriteMoviesList";
+import FavoriteFilters from "./FavoriteMovies/FavoriteFilters";
 
 export default class AccountFavorites extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      isLoading: true,
-      movieDetails: [],
+    this.initialState = {
+      filters: {
+        sort_by: "created_at.asc",
+        primary_release_year: "",
+        with_genres: [],
+      },
+      pagination: {
+        page: 1,
+        total_pages: 1,
+      },
     };
+    this.state = { ...this.initialState };
   }
 
-  componentDidMount() {
-    const {
-      match: { params },
-    } = this.props;
+  onChangeFilters = (event) => {
+    const value = event.target.value;
+    const name = event.target.name;
+    this.setState((prevState) => ({
+      filters: {
+        ...prevState.filters,
+        [name]: value,
+      },
+    }));
+  };
 
-    CallApi.get(`/movie/${params.id}`, {
-      params: { language: "ru-RU" },
-    }).then((data) => {
-      this.setState({
-        movieDetails: data,
-        isLoading: false,
-      });
-    });
-  }
+  onChangePagination = (
+    page,
+    total_pages = this.state.pagination.total_pages
+  ) => {
+    this.setState((prevState) => ({
+      pagination: {
+        ...prevState.pagination,
+        page,
+        total_pages,
+      },
+    }));
+  };
+
+  onReset = () => {
+    this.setState({ ...this.initialState });
+  };
 
   render() {
-    const { isLoading, movieId } = this.state;
-
-    return isLoading ? (
-      <Loader />
-    ) : (
-      <React.Fragment>
-        <div className="row">
-          <div className="col-6 mb-4">
-            <div className="card">
-              <div className="card-body card-movie">
-                <div className="card-movie_img">
-                  <Link to={`/movie/${movieId}/details`}>
-                    <Image
-                      className="card-img-top card-img--height"
-                      alt=""
-                      path={movieId.poster_path || movieId.backdrop_path}
-                    />
-                  </Link>
-                </div>
-                <div className="card-movie_description">
-                  <div className="card-movie_icons">
-                    <Progressbar vote_average={movieId.vote_average} />
-                    <Favorite movieId={movieId} />
-                    <WillWatch movieId={movieId} />
-                  </div>
-                  <Link
-                    className="card-title card-movie_name"
-                    to={`/movie/${movieId}/details`}
-                  >
-                    {movieId.title}
-                  </Link>
-                  <div className="card-movie_details">
-                    <Link to={`/movie/${movieId}/details`}>Подробнее</Link>
-                  </div>
-                </div>
+    const { filters, pagination } = this.state;
+    return (
+      <div className="container">
+        <div className="row mt-4">
+          <div className="col-3">
+            <div className="card w-100">
+              <div className="card-body">
+                <h3>Фильтры:</h3>
+                <FavoriteFilters
+                  pagination={pagination}
+                  filters={filters}
+                  onChangeFilters={this.onChangeFilters}
+                  onChangePagination={this.onChangePagination}
+                  onReset={this.onReset}
+                />
               </div>
             </div>
           </div>
+          <div className="col-9">
+            <FavoriteMoviesList
+              filters={filters}
+              pagination={pagination}
+              onChangePagination={this.onChangePagination}
+            />
+          </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

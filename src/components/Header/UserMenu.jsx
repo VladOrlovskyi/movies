@@ -47,7 +47,7 @@ class UserMenu extends Component {
           />
         </DropdownToggle>
         <DropdownMenu right>
-          <DropdownItem className="dropdown-item-user-menu-btn" disabled>
+          <DropdownItem className="dropdown-item-user-menu-btn">
             <Link
               to={`/account/${auth.user.id}/favorite/movies`}
               className="user-menu-btn"
